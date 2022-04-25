@@ -56,23 +56,6 @@ def test_restricted_partition(num_items: int, data: st.DataObject):
 
 
 @pytest.mark.parametrize(
-    "kwargs",
-    [
-        dict(num_items=6, num_partitions=3, min_partition_size=2, max_partition_size=2),
-        dict(num_items=6, num_partitions=3, min_partition_size=2),
-        dict(num_items=4, num_partitions=3, min_partition_size=1),
-        dict(num_items=4, num_partitions=3),
-    ],
-)
-def test_partition_cache(kwargs: Dict[str, int]):
-    cst.restricted_partitions.cache.clear()
-    assert not cst.restricted_partitions.cache
-
-    result = cst.restricted_partitions(**kwargs)
-    assert cst.restricted_partitions.cache[f"(){repr(kwargs)}"] == result
-
-
-@pytest.mark.parametrize(
     ("n", "k", "l"),
     [
         (0, 1, 1),
@@ -121,22 +104,3 @@ def test_fuzz_partitions(
     ), out
     assert out == tuple(sorted(out)[::-1]), "partitions are not in descending order"
 
-
-@pytest.mark.parametrize(
-    "field_name",
-    ["num_items", "num_partitions", "min_partition_size", "max_partition_size"],
-)
-@given(bad_value=everything_except((int, type(None))))
-def test_validate_input_types(field_name: str, bad_value: Any):
-    inputs = {
-        k: 1 if k != field_name else bad_value
-        for k in [
-            "num_items",
-            "num_partitions",
-            "min_partition_size",
-            "max_partition_size",
-        ]
-    }
-
-    with pytest.raises(cst.InvalidArgument):
-        cst.restricted_partitions(**inputs)

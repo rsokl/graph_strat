@@ -1,6 +1,6 @@
 import functools
 from numbers import Integral
-from typing import Generator, Optional, Tuple, Type, TypeVar, Union
+from typing import Generator, Optional, Tuple, TypeVar, Union
 
 import hypothesis.strategies as st
 import networkx as nx
@@ -132,20 +132,6 @@ def graphs(
 class InvalidArgument(ValueError):
     pass
 
-
-def _memoize(obj):
-    cache = obj.cache = {}
-
-    @functools.wraps(obj)
-    def memoizer(*args, **kwargs):
-        key = str(args) + str(kwargs)
-        if key not in cache:
-            cache[key] = obj(*args, **kwargs)
-        return cache[key]
-
-    return memoizer
-
-
 def _generate_partitions(
     num_items: int, num_bins: int, min_partition_size: int = 1
 ) -> Generator[Tuple[int, ...], None, None]:
@@ -162,7 +148,7 @@ def _generate_partitions(
             yield (i,) + result
 
 
-@_memoize
+@functools.lru_cache(maxsize=None)
 def restricted_partitions(
     *,
     num_items: int,
