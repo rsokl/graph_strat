@@ -133,34 +133,6 @@ class InvalidArgument(ValueError):
     pass
 
 
-Expected = TypeVar("Expected")
-
-
-def draw_value_if_strategy(
-    draw,
-    item: OptionalStrategy[Expected],
-    item_name: str,
-    expected_type: Type[Expected],
-) -> Expected:
-    """Does type checking on `item` or draws from the provided strategy and does
-    type checking on the result.
-
-    Raises
-    ------
-    InvalidArgument"""
-    if not isinstance(item, (expected_type, st.SearchStrategy)):
-        raise InvalidArgument(
-            f"`{item_name}` must be {expected_type.__name__} or a search strategy, got {item}"
-        )
-    elif isinstance(item, st.SearchStrategy):
-        item = draw(item)
-        if not isinstance(item, expected_type):
-            raise InvalidArgument(
-                f"The search strategy for `{item_name}` must produce {expected_type.__name__} values, got: {item}"
-            )
-    return item
-
-
 def _memoize(obj):
     cache = obj.cache = {}
 
