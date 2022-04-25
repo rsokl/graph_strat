@@ -61,12 +61,15 @@ def graphs(
     Notes
     -----
     The parameters provided here have the potential of over-constraining the graphs.
+
     It is recommended that you either constrain the number of connected components or
     their size, not both.
+
     Values drawn from this strategy shrink towards a graph with:
         - fewer nodes
         - fewer connected components
         - an even distribution of nodes among its connected components
+
     Also note that the partition-generation process scales harshly with number of nodes:
     it is inadvisable to draw graphs with more then tens of nodes."""
     if not isinstance(min_nodes, Integral):
@@ -195,16 +198,17 @@ def restricted_partitions(
     min_partition_size: int = 1,
     max_partition_size: Optional[int] = None,
 ) -> Tuple[Tuple[int, ...], ...]:
-    """Returns all of the ways in which N can be partitioned K ways given a minimum 
+    """Returns all of the ways in which N can be partitioned K ways given a minimum
     partition size.
-    
-    Order is disregarded and the results are returned in descending order of 
+
+    Order is disregarded and the results are returned in descending order of
     partition-size
-    
+
     Examples
     --------
     >>> restricted_partitions(num_items=10, num_partitions=3, min_partition_size=2)
     ((3, 3, 4), (2, 4, 4), (2, 3, 5), (2, 2, 6))
+
     >>> restricted_partitions(num_items=10, num_partitions=3, min_partition_size=2, max_partition_size=5)
     ((3, 3, 4), (2, 4, 4), (2, 3, 5))
     """

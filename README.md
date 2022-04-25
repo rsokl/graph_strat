@@ -11,7 +11,19 @@ from graph_strat import graphs
 
 `graphs` is a search strategy that draws networkx graphs whose number of nodes, number of connected components, and size of connected components are constrained.
 
-## Testing the strategy
+```python
+>>> strat = graphs(min_nodes=6, min_num_components=3, min_component_size=2)
+
+>>> list(nx.connected_components(strat.example()))  # note: first call to example draws 100 examples; is 100x slower than an actual draw from strat
+[{0, 1, 2, 3, 4, 5, 6, 7, 8}, {9, 10, 11, 12, 13}, {14, 15}]
+
+>>> list(nx.connected_components(strat.example()))
+[{0, 1, 2}, {3, 4}, {5, 6}, {7, 8}, {9, 10}, {11, 12}]
+
+>>> list(nx.connected_components(strat.example()))
+[{0, 1, 2}, {3, 4}, {5, 6}]
+```
+
 
 Install pytest and run
 
